@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
  @abstract Provides a string to display representing the conversation's last message.
  @param lastMessageText The last message text to display.
  */
-- (void)updateWithLastMessageText:(NSString *)lastMessageText;
+- (void)updateWithLastMessageText:(NSString *)lastMessageText isUnread:(BOOL)isUnread;
 
 @end
 NS_ASSUME_NONNULL_END

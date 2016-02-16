@@ -264,7 +264,7 @@ static CGFloat const ATLChevronIconViewRightPadding = 14.0f;
     [self updateUnreadMessageIndicatorWithConversation:conversation];
 }
 
-- (void)updateWithLastMessageText:(NSString *)lastMessageText
+- (void)updateWithLastMessageText:(NSString *)lastMessageText isUnread:(BOOL)isUnread
 {
     self.lastMessageLabel.attributedText = [self attributedStringForMessageText:lastMessageText];
 }

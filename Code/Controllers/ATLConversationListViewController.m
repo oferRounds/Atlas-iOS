@@ -302,7 +302,7 @@ NSString *const ATLConversationListViewControllerDeletionModeEveryone = @"Everyo
     if (!lastMessageText) {
         lastMessageText = [self defaultLastMessageTextForConversation:conversation];
     }
-    [conversationCell updateWithLastMessageText:lastMessageText];
+    [conversationCell updateWithLastMessageText:lastMessageText isUnread:conversation.lastMessage.isUnread];
 }
 
 #pragma mark - Reloading Conversations
