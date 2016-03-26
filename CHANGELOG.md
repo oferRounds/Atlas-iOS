@@ -1,5 +1,24 @@
 # Atlas Changelog
 
+## 1.0.20
+
+### Enhancements
+
+* Integrates LayerKit's partial-sync feature in the `ATLConversationDataSource` class.
+* Integrates LayerKit's identity feature into the `ATLConversationListViewController` and `ATLConversationViewController` classes.
+* Updated nullability support.
+* Added in line push support.
+
+### Public API Changes
+
+* `ATLConversationViewController` datasource method `conversationViewController:participantForIdentifier:` has been changed to `conversationViewController:participantForIdentity:`.
+* Adds `conversationListViewController:rowActionsForDeletionModes:` method to `ATLConversationListViewControllerDataSource`.
+
+### Bug Fixes
+
+* Fixes a bug where the pagination window in the `ATLConversationViewController` kept the spinner on screen even when no longer loading messages.
+* Fixed an issue where message part data was `nil` for text messages.
+
 ## 1.0.19
 
 ## Bug Fixes

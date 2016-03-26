@@ -47,6 +47,15 @@ extern NSString *const ATLImagePreviewHeightKey;
 extern NSString *const ATLLocationLatitudeKey;
 extern NSString *const ATLLocationLongitudeKey;
 
+extern NSString *const ATLUserNotificationInlineReplyActionIdentifier;
+extern NSString *const ATLUserNotificationDefaultActionsCategoryIdentifier;
+
+//-------------------
+// @name Push Support
+//-------------------
+
+UIMutableUserNotificationCategory *ATLDefaultUserNotificationCategory();
+
 //---------------------------------
 // @name Internationalization Macro
 //---------------------------------
@@ -83,6 +92,12 @@ CGSize ATLTextPlainSize(NSString *string, UIFont *font);
 CGRect ATLImageRectConstrainedToSize(CGSize imageSize, CGSize maxSize);
 
 CGFloat ATLDegreeToRadians(CGFloat degrees);
+
+//-----------------------------
+// @name Conversation Utilities
+//-----------------------------
+
+LYRIdentity *__nullable ATLIdentityFromSet(NSString *userID, NSSet *participants);
 
 //------------------------
 // @name Message Utilities
