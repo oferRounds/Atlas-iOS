@@ -635,7 +635,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         completePushText = [NSString stringWithFormat:@"%@: %@", senderName, pushText];
     }
     
-    LYRMessage *message = ATLMessageForParts(self.layerClient, parts, completePushText, ATLPushNotificationSoundName);
+    LYRMessage *message = ATLMessageForParts(self.layerClient, parts, completePushText, @"new_message_push_background.caf");
     return message;
 }
 
