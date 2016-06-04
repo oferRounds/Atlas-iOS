@@ -146,6 +146,7 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
 - (void)updateWithAttributedText:(NSAttributedString *)text
 {
     self.bubbleViewLabel.attributedText = text;
+    self.bubbleViewLabel.textAlignment = [self alignmentForText:text.string];
     [self applyImageWidthConstraint:NO];
     [self setBubbleViewContentType:ATLBubbleViewContentTypeText];
 }
@@ -498,6 +499,27 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_playView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_playView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:64.0f]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_playView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:64.0f]];
+}
+
+-(NSTextAlignment)alignmentForText:(NSString *)text
+{
+    BOOL rightToLeft = NO;
+    
+    if (text.length > 0) {
+        
+        NSString *langCode;
+        
+        if (text.length > 0) {
+            langCode = CFBridgingRelease(CFStringTokenizerCopyBestStringLanguage((CFStringRef)text, CFRangeMake(0, text.length)));
+            
+            if (langCode != NULL &&
+                [langCode isEqualToString:@"he"] || [langCode isEqualToString:@"ar"]) {
+                rightToLeft = YES;
+            }
+        }
+    }
+    
+    return rightToLeft ? NSTextAlignmentRight : NSTextAlignmentLeft;
 }
 
 @end
