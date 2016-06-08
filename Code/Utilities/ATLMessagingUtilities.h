@@ -103,7 +103,7 @@ LYRIdentity *__nullable ATLIdentityFromSet(NSString *userID, NSSet *participants
 // @name Message Utilities
 //------------------------
 
-LYRMessage *__nullable ATLMessageForParts(LYRClient *layerClient, NSArray <LYRMessagePart*> *messageParts, NSString *pushText, NSString *pushSound);
+LYRMessage *__nullable ATLMessageForParts(LYRClient *layerClient, NSArray <LYRMessagePart*> *messageParts, NSString *pushText, NSString *pushSound, NSDictionary<NSString *, NSString *> *apns);
 
 //-----------------------------
 // @name Message Part Utilities

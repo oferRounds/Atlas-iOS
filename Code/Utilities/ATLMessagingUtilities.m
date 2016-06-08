@@ -187,12 +187,13 @@ CGSize  ATLSizeFromOriginalSizeWithConstraint(CGSize originalSize, CGFloat const
 
 #pragma mark - Message Utilities
 
-LYRMessage *ATLMessageForParts(LYRClient *layerClient, NSArray *messageParts, NSString *pushText, NSString *pushSound)
+LYRMessage *ATLMessageForParts(LYRClient *layerClient, NSArray *messageParts, NSString *pushText, NSString *pushSound, NSDictionary<NSString *, NSString *> *apns)
 {
     LYRPushNotificationConfiguration *defaultConfiguration = [LYRPushNotificationConfiguration new];
     defaultConfiguration.alert = pushText;
     defaultConfiguration.sound = pushSound;
     defaultConfiguration.category = ATLUserNotificationDefaultActionsCategoryIdentifier;
+    defaultConfiguration.apns = apns;
     
     NSDictionary *options = @{ LYRMessageOptionsPushNotificationConfigurationKey: defaultConfiguration };
     NSError *error;
