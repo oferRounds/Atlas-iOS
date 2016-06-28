@@ -147,13 +147,16 @@ NSString *const ATLConversationListViewControllerDeletionModeEveryone = @"Everyo
     
     // Perform setup here so that our children can initialize via viewDidLoad
     if (!self.hasAppeared) {
-        [self setupConversationQueryController];
         
         // Hide the search bar
         CGFloat contentOffset = self.tableView.contentOffset.y + self.searchBar.frame.size.height;
         self.tableView.contentOffset = CGPointMake(0, contentOffset);
         self.tableView.rowHeight = self.rowHeight;
         if (self.allowsEditing) [self addEditButton];
+    }
+    
+    if (!self.queryController) {
+        [self setupConversationQueryController];
     }
    
     NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
