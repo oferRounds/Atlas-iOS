@@ -385,8 +385,8 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if ([self shouldDisplayReadReceiptForSection:section]) {
         readReceipt = [self attributedStringForRecipientStatusOfMessage:[self.conversationDataSource messageAtCollectionViewSection:section]];
     }
-    BOOL shouldClusterMessage = NO;// [self shouldClusterMessageAtSection:section];
-    CGFloat height = [ATLConversationCollectionViewFooter footerHeightWithRecipientStatus:readReceipt clustered:shouldClusterMessage];
+    //BOOL shouldClusterMessage = [self shouldClusterMessageAtSection:section];
+    CGFloat height = [ATLConversationCollectionViewFooter footerHeightWithRecipientStatus:readReceipt clustered:NO];
     return CGSizeMake(0, height);
 }
 
@@ -592,14 +592,14 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (void)messageInputToolbarDidType:(ATLMessageInputToolbar *)messageInputToolbar
 {
-    if (!self.conversation) return;
-    [self.conversation sendTypingIndicator:LYRTypingDidBegin];
+//    if (!self.conversation) return;
+//    [self.conversation sendTypingIndicator:LYRTypingDidBegin];
 }
 
 - (void)messageInputToolbarDidEndTyping:(ATLMessageInputToolbar *)messageInputToolbar
 {
-    if (!self.conversation) return;
-    [self.conversation sendTypingIndicator:LYRTypingDidFinish];
+//    if (!self.conversation) return;
+//    [self.conversation sendTypingIndicator:LYRTypingDidFinish];
 }
 
 #pragma mark - Message Sending
@@ -635,7 +635,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         completePushText = [NSString stringWithFormat:@"%@: %@", senderName, pushText];
     }
     
-    LYRMessage *message = ATLMessageForParts(self.layerClient, parts, completePushText, @"new_message_push_background.caf", @{@"launch-image": @"chat_launch_image.png"});
+    LYRMessage *message = ATLMessageForParts(self.layerClient, parts, completePushText, @"new_message_push_background.caf", nil);
     return message;
 }
 
@@ -779,19 +779,19 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (void)didReceiveTypingIndicator:(NSNotification *)notification
 {
-    if (!self.conversation) return;
-    if (!notification.object) return;
-    if (![notification.object isEqual:self.conversation]) return;
-    
-    NSString *participantID = notification.userInfo[LYRTypingIndicatorParticipantUserInfoKey];
-    NSNumber *statusNumber = notification.userInfo[LYRTypingIndicatorValueUserInfoKey];
-    LYRTypingIndicator status = statusNumber.unsignedIntegerValue;
-    if (status == LYRTypingDidBegin) {
-        [self.typingParticipantIDs addObject:participantID];
-    } else {
-        [self.typingParticipantIDs removeObject:participantID];
-    }
-    [self updateTypingIndicatorOverlay:YES];
+//    if (!self.conversation) return;
+//    if (!notification.object) return;
+//    if (![notification.object isEqual:self.conversation]) return;
+//    
+//    NSString *participantID = notification.userInfo[LYRTypingIndicatorParticipantUserInfoKey];
+//    NSNumber *statusNumber = notification.userInfo[LYRTypingIndicatorValueUserInfoKey];
+//    LYRTypingIndicator status = statusNumber.unsignedIntegerValue;
+//    if (status == LYRTypingDidBegin) {
+//        [self.typingParticipantIDs addObject:participantID];
+//    } else {
+//        [self.typingParticipantIDs removeObject:participantID];
+//    }
+//    [self updateTypingIndicatorOverlay:YES];
 }
 
 - (void)layerClientObjectsDidChange:(NSNotification *)notification
@@ -1163,9 +1163,11 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     conversation = [self existingConversationWithParticipantIdentifiers:participantIdentifiers];
     if (conversation) return conversation;
     
-    BOOL deliveryReceiptsEnabled = participants.count <= 5;
-    NSDictionary *options = @{LYRConversationOptionsDeliveryReceiptsEnabledKey: @(deliveryReceiptsEnabled)};
+    LYRConversationOptions *options = [LYRConversationOptions new];
+    options.deliveryReceiptsEnabled = NO;
+    
     conversation = [self.layerClient newConversationWithParticipants:participantIdentifiers options:options error:nil];
+    
     return conversation;
 }
 

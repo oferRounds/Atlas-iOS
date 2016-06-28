@@ -195,7 +195,9 @@ LYRMessage *ATLMessageForParts(LYRClient *layerClient, NSArray *messageParts, NS
     defaultConfiguration.category = ATLUserNotificationDefaultActionsCategoryIdentifier;
     defaultConfiguration.apns = apns;
     
-    NSDictionary *options = @{ LYRMessageOptionsPushNotificationConfigurationKey: defaultConfiguration };
+    LYRMessageOptions *options = [LYRMessageOptions new];
+    options.pushNotificationConfiguration = defaultConfiguration;
+    
     NSError *error;
     LYRMessage *message = [layerClient newMessageWithParts:messageParts options:options error:&error];
     if (error) {
