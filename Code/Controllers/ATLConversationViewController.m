@@ -592,14 +592,14 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (void)messageInputToolbarDidType:(ATLMessageInputToolbar *)messageInputToolbar
 {
-//    if (!self.conversation) return;
-//    [self.conversation sendTypingIndicator:LYRTypingDidBegin];
+    if (!self.conversation) return;
+    [self.conversation sendTypingIndicator:LYRTypingIndicatorActionBegin];
 }
 
 - (void)messageInputToolbarDidEndTyping:(ATLMessageInputToolbar *)messageInputToolbar
 {
-//    if (!self.conversation) return;
-//    [self.conversation sendTypingIndicator:LYRTypingDidFinish];
+    if (!self.conversation) return;
+    [self.conversation sendTypingIndicator:LYRTypingIndicatorActionFinish];
 }
 
 #pragma mark - Message Sending
@@ -779,19 +779,17 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (void)didReceiveTypingIndicator:(NSNotification *)notification
 {
-//    if (!self.conversation) return;
-//    if (!notification.object) return;
-//    if (![notification.object isEqual:self.conversation]) return;
-//    
-//    NSString *participantID = notification.userInfo[LYRTypingIndicatorParticipantUserInfoKey];
-//    NSNumber *statusNumber = notification.userInfo[LYRTypingIndicatorValueUserInfoKey];
-//    LYRTypingIndicator status = statusNumber.unsignedIntegerValue;
-//    if (status == LYRTypingDidBegin) {
-//        [self.typingParticipantIDs addObject:participantID];
-//    } else {
-//        [self.typingParticipantIDs removeObject:participantID];
-//    }
-//    [self updateTypingIndicatorOverlay:YES];
+    if (!self.conversation) return;
+    if (!notification.object) return;
+    if (![notification.object isEqual:self.conversation]) return;
+
+    LYRTypingIndicator *typingIndicator = notification.userInfo[LYRTypingIndicatorObjectUserInfoKey];
+    if (typingIndicator.action == LYRTypingIndicatorActionBegin) {
+        [self.typingParticipantIDs addObject:typingIndicator.sender.userID];
+    } else {
+        [self.typingParticipantIDs removeObject:typingIndicator.sender.userID];
+    }
+    [self updateTypingIndicatorOverlay:YES];
 }
 
 - (void)layerClientObjectsDidChange:(NSNotification *)notification
