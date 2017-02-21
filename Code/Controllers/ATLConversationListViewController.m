@@ -397,8 +397,8 @@ NSString *const ATLConversationListViewControllerDeletionModeEveryone = @"Everyo
         for (NSNumber *deletionMode in self.deletionModes) {
             NSString *actionString;
             UIColor *actionColor;
-            if ([self.dataSource respondsToSelector:@selector(conversationListViewController:textForButtonWithDeletionMode:)]) {
-                actionString = [self.dataSource conversationListViewController:self textForButtonWithDeletionMode:deletionMode.integerValue];
+            if ([self.dataSource respondsToSelector:@selector(conversationListViewController:textForButtonWithDeletionMode:indexPath:)]) {
+                actionString = [self.dataSource conversationListViewController:self textForButtonWithDeletionMode:deletionMode.integerValue indexPath:indexPath];
             } else {
                 switch (deletionMode.integerValue) {
                     case LYRDeletionModeMyDevices:
@@ -425,10 +425,24 @@ NSString *const ATLConversationListViewControllerDeletionModeEveryone = @"Everyo
                         break;
                 }
             }
+            
             UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:actionString handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                [self deleteConversationAtIndexPath:indexPath withDeletionMode:deletionMode.integerValue];
+                
+                if ([self.delegate respondsToSelector:@selector(conversationListViewController:shouldDeleteAtIndexPath:completion:)]) {
+                    [self.delegate conversationListViewController:self shouldDeleteAtIndexPath:indexPath completion:^(BOOL shouldDelete) {
+                        if (shouldDelete) {
+                            [self deleteConversationAtIndexPath:indexPath withDeletionMode:deletionMode.integerValue];
+                        } else {
+                            [self setEditing:NO animated:YES];
+                        }
+                    }];
+                } else {
+                    [self deleteConversationAtIndexPath:indexPath withDeletionMode:deletionMode.integerValue];
+                }
             }];
+            
             deleteAction.backgroundColor = actionColor;
+            deleteAction.title = actionString;
             [actions addObject:deleteAction];
         }
     }

@@ -50,6 +50,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)conversationListViewController:(ATLConversationListViewController *)conversationListViewController didDeleteConversation:(LYRConversation *)conversation deletionMode:(LYRDeletionMode)deletionMode;
 
+
+- (void)conversationListViewController:(ATLConversationListViewController *)conversationListViewController shouldDeleteAtIndexPath:(NSIndexPath *)indexPath completion:(void (^ _Nonnull)(BOOL shouldDelete))completion;
+
+
 /**
  @abstract Informs the delegate that an attempt to delete an `LYRConversation` failed.
  @param conversationListViewController The `LYRConversationListViewController` in which the deletion attempt occurred.
@@ -110,7 +114,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param deletionMode The `LYRDeletionMode` for which a button has to be displayed.
  @return The string to be displayed on the delete button for a given deletion mode in the conversation list.
  */
-- (NSString *)conversationListViewController:(ATLConversationListViewController *)conversationListViewController textForButtonWithDeletionMode:(LYRDeletionMode)deletionMode;
+- (NSString *)conversationListViewController:(ATLConversationListViewController *)conversationListViewController textForButtonWithDeletionMode:(LYRDeletionMode)deletionMode indexPath:(NSIndexPath *)indexPath;
 
 /**
  @abstract Asks the data source for a color to apply to the delete button for a given deletion mode.
