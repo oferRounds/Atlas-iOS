@@ -31,7 +31,7 @@
 #import "ATLMediaAttachment.h"
 #import "ATLLocationManager.h"
 #import "LYRIdentity+ATLParticipant.h"
-
+#import <Atlas/Atlas-Swift.h>
 @import AVFoundation;
 
 @interface ATLConversationViewController () <UICollectionViewDataSource, UICollectionViewDelegate, CLLocationManagerDelegate>
@@ -126,7 +126,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     [super loadView];
     // Collection View Setup
     self.collectionView = [[ATLConversationCollectionView alloc] initWithFrame:CGRectZero
-                                                          collectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
+                                                          collectionViewLayout:[BouncyLayout new]];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
 }
@@ -181,7 +181,6 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     
     self.hasAppeared = YES;
     [self configurePaginationWindow];
-    [self configureMoreMessagesIndicatorVisibility];
     
     if (self.addressBarController && !self.addressBarController.isDisabled) {
         [self.addressBarController.addressBarView.addressBarTextView becomeFirstResponder];
@@ -227,11 +226,14 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     [self updateTypingIndicatorOverlay:NO];
     
     // Set up the controller for the conversation
-    [self deinitializeConversationDataSource];
-    [self setupConversationDataSource];
     [self configureControllerForConversation];
     [self configureAddressBarForChangedParticipants];
     
+    if (conversation) {
+        [self setupConversationDataSource];
+    } else {
+        [self deinitializeConversationDataSource];
+    }
     CGSize contentSize = self.collectionView.collectionViewLayout.collectionViewContentSize;
     [self.collectionView setContentOffset:[self bottomOffsetForContentSize:contentSize] animated:NO];
 }
@@ -430,19 +432,16 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 {
     if (decelerate) return;
     [self configurePaginationWindow];
-    [self configureMoreMessagesIndicatorVisibility];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [self configurePaginationWindow];
-    [self configureMoreMessagesIndicatorVisibility];
 }
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
 {
     [self configurePaginationWindow];
-    [self configureMoreMessagesIndicatorVisibility];
 }
 
 #pragma mark - Reusable View Configuration
@@ -1208,9 +1207,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
           forChangeType:(LYRQueryControllerChangeType)type
            newIndexPath:(NSIndexPath *)newIndexPath
 {
-    if (self.collectionView.window == nil) return;
     if (self.expandingPaginationWindow) return;
-    
     NSInteger currentIndex = indexPath ? [self.conversationDataSource collectionViewSectionForQueryControllerRow:indexPath.row] : NSNotFound;
     NSInteger newIndex = newIndexPath ? [self.conversationDataSource collectionViewSectionForQueryControllerRow:newIndexPath.row] : NSNotFound;
     [self.objectChanges addObject:[ATLDataSourceChange changeObjectWithType:type newIndex:newIndex currentIndex:currentIndex]];
@@ -1225,12 +1222,6 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 {
     NSArray *objectChanges = [self.objectChanges copy];
     [self.objectChanges removeAllObjects];
-    
-    if (self.collectionView.window == nil) {
-        [self.collectionView reloadData];
-        [self.collectionView layoutIfNeeded];
-        return;
-    }
     
     if (self.expandingPaginationWindow) {
         self.expandingPaginationWindow = NO;
