@@ -19,9 +19,9 @@
 //
 
 #import "ATLMediaInputStream.h"
+#import <AVFoundation/AVFoundation.h>
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
-@import AVFoundation;
 
 #ifdef DEBUG_ATLMediaInputStreamLog
 #define ATLMediaInputStreamLog(fmt, ...) NSLog(fmt, ##__VA_ARGS__)
@@ -811,7 +811,7 @@ static size_t ATLMediaInputStreamPutBytesIntoStreamCallback(void *assetStreamRef
     }
     
     // Copy the consumed data to `buffer`.
-    [self.dataConsumed getBytes:buffer length:bytesToConsume];
+    [self.dataConsumed getBytes:buffer length:MIN(bytesToConsume, self.dataConsumed.length)];
     ATLMediaInputStreamLog(@"input stream: passed data to receiver");
     
     // Clear transfer buffer.
