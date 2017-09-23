@@ -67,7 +67,7 @@ extern CGFloat const ATLAvatarImageDiameter;
 /**
  @abstract Sets whether the presence status is shown for this AvatarView. Default is true.
  */
-@property (nonatomic) BOOL presenceStatusEnabled;
+@property (nonatomic) BOOL presenceStatusEnabled UI_APPEARANCE_SELECTOR;
 
 /**
  @abstract Sets the avatar item, image view, and initial view to nil in preparation for reuse.
