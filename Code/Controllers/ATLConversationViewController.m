@@ -126,7 +126,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     [super loadView];
     // Collection View Setup
     self.collectionView = [[ATLConversationCollectionView alloc] initWithFrame:CGRectZero
-                                                          collectionViewLayout:[BouncyLayout new]];
+                                                          collectionViewLayout:[UICollectionViewFlowLayout new]];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
 }
